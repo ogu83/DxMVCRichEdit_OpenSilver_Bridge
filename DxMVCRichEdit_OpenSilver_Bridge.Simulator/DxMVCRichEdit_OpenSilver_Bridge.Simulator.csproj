@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net472</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="OpenSilver.Simulator" Version="1.2.0-preview-2022-09-29-161725-120d877d" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DxMVCRichEdit_OpenSilver_Bridge\DxMVCRichEdit_OpenSilver_Bridge.csproj" />
+	</ItemGroup>
+
+</Project>
