@@ -100,8 +100,8 @@ function createRichEdit(exportUrl) {
     options.exportUrl = exportUrl;
 
     options.readOnly = false;
-    options.width = '1400px';
-    options.height = '900px';
+    options.width = '720px';
+    options.height = '450px';
 
     options.spellCheck.enabled = true;
     options.spellCheck.suggestionCount = 5;
