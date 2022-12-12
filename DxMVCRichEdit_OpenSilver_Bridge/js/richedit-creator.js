@@ -1,4 +1,7 @@
-﻿
+﻿var spellCheckerWorker = null;
+var spellCheckerCallbacks = Object.create(null);
+var spellCheckerWorkerCommandId = 0;
+
 function createRichEdit(exportUrl) {
     const options = DevExpress.RichEdit.createOptions();
 
@@ -99,6 +102,46 @@ function createRichEdit(exportUrl) {
     options.readOnly = false;
     options.width = '1400px';
     options.height = '900px';
+
+    options.spellCheck.enabled = true;
+    options.spellCheck.suggestionCount = 5;
+    options.spellCheck.checkWordSpelling = function (word, callback) {
+        //debugger;
+        if (!spellCheckerWorker) {
+            var myDictionary = JSON.parse(localStorage.getItem('myDictionary')) || [];
+            spellCheckerWorker = new Worker('./spell-checker-worker.js');
+            myDictionary.forEach(function (word) {
+                spellCheckerWorker.postMessage({
+                    command: 'addWord',
+                    word: word,
+                });
+            });
+
+            spellCheckerWorker.onmessage = function (e) {
+                var savedCallback = spellCheckerCallbacks[e.data.id];
+                delete spellCheckerCallbacks[e.data.id];
+                savedCallback(e.data.isCorrect, e.data.suggestions);
+            };
+        }
+
+        var currId = spellCheckerWorkerCommandId++;
+        spellCheckerCallbacks[currId] = callback;
+        spellCheckerWorker.postMessage({
+            command: 'checkWord',
+            word: word,
+            id: currId,
+        });
+    };
+    options.spellCheck.addWordToDictionary = function (word) {
+        var myDictionary = JSON.parse(localStorage.getItem('myDictionary')) || [];
+        myDictionary.push(word);
+        localStorage.setItem('myDictionary', JSON.stringify(myDictionary));
+
+        spellCheckerWorker.postMessage({
+            command: 'addWord',
+            word: word,
+        });
+    };
 
     var richElement = document.getElementById("rich-container");
 

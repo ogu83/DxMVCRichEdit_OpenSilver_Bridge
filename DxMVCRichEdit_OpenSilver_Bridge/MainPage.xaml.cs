@@ -20,6 +20,7 @@ namespace DxMVCRichEdit_OpenSilver_Bridge
             await OpenSilver.Interop.LoadJavaScriptFile("ms-appx:///DxMVCRichEdit_OpenSilver_Bridge/js/jszip.min.js");
             await OpenSilver.Interop.LoadJavaScriptFile("ms-appx:///DxMVCRichEdit_OpenSilver_Bridge/js/dx.all.js");
             await OpenSilver.Interop.LoadJavaScriptFile("ms-appx:///DxMVCRichEdit_OpenSilver_Bridge/js/dx.richedit.min.js");
+            await OpenSilver.Interop.LoadJavaScriptFile("ms-appx:///DxMVCRichEdit_OpenSilver_Bridge/js/nspell.js");
             await OpenSilver.Interop.LoadJavaScriptFile("ms-appx:///DxMVCRichEdit_OpenSilver_Bridge/js/richedit-creator.js");
 
             var initScript = @"createRichEdit('api/SaveDocument');";
