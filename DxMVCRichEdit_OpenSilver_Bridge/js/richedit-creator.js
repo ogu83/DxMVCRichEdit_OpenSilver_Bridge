@@ -104,7 +104,7 @@ function createRichEdit(exportUrl) {
     options.height = '450px';
 
     options.spellCheck.enabled = true;
-    options.spellCheck.suggestionCount = 5;
+    options.spellCheck.suggestionCount = 10;
     options.spellCheck.checkWordSpelling = function (word, callback) {
         //debugger;
         if (!spellCheckerWorker) {

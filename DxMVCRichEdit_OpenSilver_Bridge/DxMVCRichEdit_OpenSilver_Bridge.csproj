@@ -148,7 +148,7 @@
 
   <ItemGroup>
     <Content Include="js\richedit-creator.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
