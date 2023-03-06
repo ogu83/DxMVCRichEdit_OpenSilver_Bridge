@@ -51,7 +51,7 @@ namespace DxMVCRichEdit_OpenSilver_Bridge
             await OpenSilver.Interop.LoadJavaScriptFile("ms-appx:///DxMVCRichEdit_OpenSilver_Bridge/js/nspell.js");
             await OpenSilver.Interop.LoadJavaScriptFile("ms-appx:///DxMVCRichEdit_OpenSilver_Bridge/js/richedit-creator.js");
 
-            var initScript = @"createRichEdit('api/SaveDocument');";
+            var initScript = @"createRichEdit();";
             OpenSilver.Interop.ExecuteJavaScript(initScript);
         }
 
@@ -184,6 +184,12 @@ namespace DxMVCRichEdit_OpenSilver_Bridge
         {
             if (expander.GetChildInTreeOfType<System.Windows.Controls.Primitives.ToggleButton>() != null)
                 expander.GetChildInTreeOfType<System.Windows.Controls.Primitives.ToggleButton>().IsEnabled = enabled;
+        }
+
+        private void btnGetText_Click(object sender, RoutedEventArgs e)
+        {
+            var rtf = OpenSilver.Interop.ExecuteJavaScript($"getRtf()").ToString();
+            txtRtf.Text = rtf;
         }
     }
 }

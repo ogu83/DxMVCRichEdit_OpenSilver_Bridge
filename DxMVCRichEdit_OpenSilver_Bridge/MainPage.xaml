@@ -59,13 +59,14 @@
 
         <StackPanel Orientation="Vertical">
             <TextBlock x:Name="txtTitle" FontSize="22" Text="OpenSilver with MVC DevExRichEditor SpellChecker Demo"/>
-            <Grid>
+            
                 <native:HtmlPresenter xmlns:native="using:CSHTML5.Native.Html.Controls" 
                                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                                   mc:Ignorable="native">
-                    <div id='rich-container' style="width: 100%; height: 900px"></div>
+                    <div id='rich-container' style="width: 100%; height: 450px"></div>
                 </native:HtmlPresenter>
-            </Grid>
+            <Button Height="32" x:Name="btnGetText" Click="btnGetText_Click">Get Text</Button>
+            <TextBlock Height="450" TextWrapping="Wrap" VerticalContentAlignment="Top" x:Name="txtRtf" />
         </StackPanel>
     </StackPanel>
 
