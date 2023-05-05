@@ -362,4 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-.DxMVCRichEdit_OpenSilver_Bridge.Browser/wwwroot/libs
+# OSF
+/DxMVCRichEdit_OpenSilver_Bridge.Browser/wwwroot/libs/
