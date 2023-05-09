@@ -9,9 +9,6 @@
     <type fullname="System.Runtime.CompilerServices.RuntimeFeature">
       <method signature="System.Boolean get_IsDynamicCodeCompiled()" body="stub" value="false" />
     </type>
-    <type fullname="System.Resources.ResourceReader">
-      <method signature="System.Boolean InitializeBinaryFormatter()" body="stub" value="false" />
-    </type>
   </assembly>
   <assembly fullname="System.Private.CoreLib">
     <type fullname="System.Diagnostics.Tracing.EventSource" feature="System.Diagnostics.Tracing.EventSource.IsSupported" featurevalue="false">
@@ -48,6 +45,9 @@
     <type fullname="System.Reflection.NullabilityInfoContext" feature="System.Reflection.NullabilityInfoContext.IsSupported" featurevalue="false">
       <method signature="System.Boolean get_IsSupported()" body="stub" value="false" />
     </type>
+    <type fullname="Internal.Runtime.InteropServices.ComponentActivator" feature="System.Runtime.InteropServices.EnableConsumingManagedCodeFromNativeHosting" featurevalue="false">
+      <method signature="System.Boolean get_IsSupported()" body="stub" value="false" />
+    </type>
   </assembly>
   <assembly fullname="System.Private.CoreLib">
     <type fullname="System.BitConverter">
@@ -63,6 +63,9 @@
     </type>
   </assembly>
   <assembly fullname="System.Private.CoreLib">
+    <type fullname="System.Runtime.Intrinsics.Vector64">
+      <method signature="System.Boolean get_IsHardwareAccelerated()" body="stub" value="false" />
+    </type>
     <type fullname="System.Runtime.Intrinsics.Arm.AdvSimd">
       <method signature="System.Boolean get_IsSupported()" body="stub" value="false" />
     </type>
@@ -113,6 +116,9 @@
     </type>
   </assembly>
   <assembly fullname="System.Private.CoreLib">
+    <type fullname="System.Runtime.Intrinsics.Vector256">
+      <method signature="System.Boolean get_IsHardwareAccelerated()" body="stub" value="false" />
+    </type>
     <type fullname="System.Runtime.Intrinsics.X86.Aes">
       <method signature="System.Boolean get_IsSupported()" body="stub" value="false" />
     </type>
@@ -213,6 +219,12 @@
       <method signature="System.Boolean get_IsSupported()" body="stub" value="false" />
     </type>
     <type fullname="System.Runtime.Intrinsics.X86.X86Base/X64">
+      <method signature="System.Boolean get_IsSupported()" body="stub" value="false" />
+    </type>
+    <type fullname="System.Runtime.Intrinsics.X86.X86Serialize">
+      <method signature="System.Boolean get_IsSupported()" body="stub" value="false" />
+    </type>
+    <type fullname="System.Runtime.Intrinsics.X86.X86Serialize/X64">
       <method signature="System.Boolean get_IsSupported()" body="stub" value="false" />
     </type>
   </assembly>

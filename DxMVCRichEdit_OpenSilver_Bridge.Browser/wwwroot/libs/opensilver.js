@@ -13,70 +13,53 @@
 *
 \*====================================================================================*/
 
+promises = [];
 
+// Load all css and js files
+(function (names) {
+    names.forEach((name) => {
+        var extension = name.split('.').pop();
+        var url = name + "?date=" + new Date().toISOString();
+        if (extension == 'js') {
+            //create a new promise to load the file, which wil help us know when the loading is done.
+            promises.push(new Promise((resolve, reject) => {
+                var el = document.createElement('script');
+                el.setAttribute('type', 'application/javascript');
+                el.setAttribute('src', url);
+                //register to the events of the script loading to settle the promise:
+                el.onload = function () {
+                    resolve(url);
+                };
+                // if it fails, return reject
+                el.onerror = function () {
+                    reject(url);
+                }
+                //attach the script tag.
+                document.getElementsByTagName('head')[0].appendChild(el);
 
-//new Element("link",   { rel:"stylesheet", src: "cshtml5.css", type: "text/css" });
-var link = document.createElement('link');
-link.setAttribute('rel', 'stylesheet');
-link.setAttribute('type', 'text/css');
-link.setAttribute('href', 'libs/cshtml5.css');
-document.getElementsByTagName('head')[0].appendChild(link);
+            }));
+        }
+        else if (extension == 'css') {
+            var el = document.createElement('link');
+            el.setAttribute('rel', 'stylesheet');
+            el.setAttribute('type', 'text/css');
+            el.setAttribute('href', url);
+            document.getElementsByTagName('head')[0].appendChild(el);
+        }
+    });
+}(['libs/cshtml5.css',
+    'libs/flatpickr.css',
+    'libs/quill.core.css',
+    'libs/cshtml5.js',
+    'libs/velocity.js',
+    'libs/flatpickr.js',
+    'libs/ResizeSensor.js',
+    'libs/ResizeObserver.js',    
+    'libs/quill.min.js',
+    'libs/html2canvas.js']));
 
-//new Element("link",   { rel:"stylesheet", src: "flatpickr.css", type: "text/css" });
-var link = document.createElement('link');
-link.setAttribute('rel', 'stylesheet');
-link.setAttribute('type', 'text/css');
-link.setAttribute('href', 'libs/flatpickr.css');
-document.getElementsByTagName('head')[0].appendChild(link);
-
-//new Element("link",   { rel:"stylesheet", src: "quill.core.css", type: "text/css" });
-var link = document.createElement('link');
-link.setAttribute('rel', 'stylesheet');
-link.setAttribute('type', 'text/css');
-link.setAttribute('href', 'libs/quill.core.css');
-document.getElementsByTagName('head')[0].appendChild(link);
-
-//new Element("script", { src: "cshtml5.js", type: "application/javascript" });
-var cshtml5Script = document.createElement('script');
-cshtml5Script.setAttribute('type', 'application/javascript');
-cshtml5Script.setAttribute('src', 'libs/cshtml5.js');
-document.getElementsByTagName('head')[0].appendChild(cshtml5Script);
-
-//new Element("script", { src: "fastclick.js", type: "application/javascript" });
-var fastclickScript = document.createElement('script');
-fastclickScript.setAttribute('type', 'application/javascript');
-fastclickScript.setAttribute('src', 'libs/fastclick.js');
-document.getElementsByTagName('head')[0].appendChild(fastclickScript);
-
-//new Element("script", { src: "velocity.js", type: "application/javascript" });
-var velocityScript = document.createElement('script');
-velocityScript.setAttribute('type', 'application/javascript');
-velocityScript.setAttribute('src', 'libs/velocity.js');
-document.getElementsByTagName('head')[0].appendChild(velocityScript);
-
-//new Element("script", { src: "flatpickr.js", type: "application/javascript" });
-var velocityScript = document.createElement('script');
-velocityScript.setAttribute('type', 'application/javascript');
-velocityScript.setAttribute('src', 'libs/flatpickr.js');
-document.getElementsByTagName('head')[0].appendChild(velocityScript);
-
-
-//new Element("script", { src: "ResizeSensor.js", type: "application/javascript" });
-var velocityScript = document.createElement('script');
-velocityScript.setAttribute('type', 'application/javascript');
-velocityScript.setAttribute('src', 'libs/ResizeSensor.js');
-document.getElementsByTagName('head')[0].appendChild(velocityScript);
-
-//new Element("script", { src: "ResizeObserver.js", type: "application/javascript" });
-var velocityScript = document.createElement('script');
-velocityScript.setAttribute('type', 'application/javascript');
-velocityScript.setAttribute('src', 'libs/ResizeObserver.js');
-document.getElementsByTagName('head')[0].appendChild(velocityScript);
-
-let quillJsScript = document.createElement('script');
-quillJsScript.setAttribute('type', 'application/javascript');
-quillJsScript.setAttribute('src', 'libs/quill.min.js');
-document.getElementsByTagName('head')[0].appendChild(quillJsScript);
+//the function defined below returns a promise that can be awaited so we know the js files above have all been loaded (or failed, but we went through all of them).
+window.getOSFilesLoadedPromise = () => { return Promise.allSettled(promises); };
 
 window.onCallBack = (function () {
     const opensilver = "OpenSilver";
@@ -95,15 +78,16 @@ window.onCallBack = (function () {
                 // if we deal with an array, we need to check
                 // that all the items are primitive types.
                 if (Array.isArray(args)) {
-                    callbackArgs = args;
+                    callbackArgs = [];
                     for (let i = 0; i < args.length; i++) {
                         let itemType = typeof args[i];
-                        if (!(args[i] === null || itemType === 'number' || itemType === 'string' || itemType === 'boolean' ||
+                        if ((args[i] === null || itemType === 'number' || itemType === 'string' || itemType === 'boolean' ||
                             // Check for TypedArray. This is used for reading binary data for FileReader for example
                             (ArrayBuffer.isView(args[i]) && !(args[i] instanceof DataView))
                         )) {
-                            callbackArgs = [];
-                            break;
+                            callbackArgs.push(args[i]);
+                        } else {
+                            callbackArgs.push(undefined);
                         }
                     }
                     break;
@@ -134,36 +118,46 @@ window.onCallBack = (function () {
 })();
 
 window.callJS = function (javaScriptToExecute) {
-    //console.log(javaScriptToExecute);
-
     var result = eval(javaScriptToExecute);
-    //console.log(result);
     var resultType = typeof result;
     if (resultType == 'string' || resultType == 'number' || resultType == 'boolean') {
-        //if (typeof result !== 'undefined' && typeof result !== 'function') {
-        //console.log("supported");
-        return result;
+       return result;
     }
-    else {
-        //console.log("not supported");
-        if (resultType === 'undefined')
-            return "[UNDEFINED]";
-        else
+    else if (result == null) {
+        return null;
+    } else {     
             return result + " [NOT USABLE DIRECTLY IN C#] (" + resultType + ")";
     }
 };
 
-window.callJSUnmarshalled = function (javaScriptToExecute) {
+window.callJSUnmarshalled = function (javaScriptToExecute, referenceId, wantsResult) {
     javaScriptToExecute = BINDING.conv_string(javaScriptToExecute);
     var result = eval(javaScriptToExecute);
+
+    if (referenceId >= 0)
+        document.jsObjRef[referenceId.toString()] = result;
+
+    if (!wantsResult) 
+        return;
+
     var resultType = typeof result;
     if (resultType == 'string' || resultType == 'number' || resultType == 'boolean') {
         return BINDING.js_to_mono_obj(result);
     }
-    else {
-        if (resultType === 'undefined')
-            return BINDING.js_to_mono_obj("[UNDEFINED]");
-        else
-            return BINDING.js_to_mono_obj(result + " [NOT USABLE DIRECTLY IN C#] (" + resultType + ")");
+    else if (result == null) {
+        return null;
+    } else {
+        return BINDING.js_to_mono_obj(result + " [NOT USABLE DIRECTLY IN C#] (" + resultType + ")");
     }
-}; 
+};
+
+
+// IMPORTANT: this doesn't return anything (this just executes the pending async JS)
+window.callJSUnmarshalledHeap = (function () {
+    const textDecoder = new TextDecoder('utf-16le');
+    return function (arrAddress, length) {
+        const byteArray = Module.HEAPU8.subarray(arrAddress + 16, arrAddress + 16 + length);
+        const javaScriptToExecute = textDecoder.decode(byteArray);
+        eval(javaScriptToExecute);
+    };
+})();
